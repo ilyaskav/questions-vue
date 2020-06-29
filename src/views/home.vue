@@ -10,7 +10,7 @@
             <button type="button" class="btn btn-primary">Ask question</button>
           </div>
         </div>
-        <questions-list :questions="questions"></questions-list>
+        <questions-list></questions-list>
       </div>
     </div>
   </div>
@@ -27,7 +27,6 @@ export default {
   },
   data() {
     return {
-      questions: [{ question: 'Как мне увидеть оповещение о вопросе?' }]
     };
   }
 };
