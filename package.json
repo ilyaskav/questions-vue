@@ -44,7 +44,8 @@
       "no-trailing-spaces":"off",
       "quotes": ["error", "single"],
       "semi": ["warn", "always"],
-      "space-before-function-paren":"off"
+      "space-before-function-paren":"off",
+      "padded-blocks":"warn"
     }
   },
   "browserslist": [
