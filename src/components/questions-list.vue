@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="questions-list">
     <ul class="nav nav-pills">
       <li class="nav-item">
         <a class="nav-link active" href="#">Popular</a>
@@ -11,7 +11,9 @@
         <a class="nav-link" href="#">Unanswered</a>
       </li>
     </ul>
-    <questions-list-item v-for="question in questions" :key="question.id" :question="question"></questions-list-item>
+    <div class="list-items-container">
+      <questions-list-item v-for="question in questions" :key="question.id" :question="question"></questions-list-item>
+    </div>
   </div>
 </template>
 
@@ -57,5 +59,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.questions-list {
+  margin-top: 25px;
+}
+.list-items-container {
+  margin-top: 20px;
+}
 </style>
