@@ -1,13 +1,22 @@
 <template>
-  <div class="home container-md">
+  <div class="home">
     <div class="row">
       <div class="col-md">
         <div class="form-row question-input">
           <div class="col-md-10">
-            <input type="text" placeholder="What do you want to know" class="form-control" />
+            <input
+              type="text"
+              placeholder="What do you want to know"
+              class="form-control"
+              v-model="question"
+            />
           </div>
           <div class="col-md-2">
-            <button type="button" class="btn btn-primary form-control">Ask question</button>
+            <button
+              type="button"
+              class="btn btn-primary form-control"
+              @click="openAskForm()"
+            >Ask question</button>
           </div>
         </div>
         <questions-list></questions-list>
@@ -27,7 +36,13 @@ export default {
   },
   data() {
     return {
+      question: null
     };
+  },
+  methods: {
+    openAskForm() {
+      this.$router.push({ name: 'ask', query: { question: this.question } });
+    }
   }
 };
 </script>
