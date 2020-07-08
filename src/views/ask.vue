@@ -13,6 +13,9 @@
       <editor initialEditType="wysiwyg" ref="toastuiEditor"></editor>
     </div>
     <div class="form-group">
+      <v-select taggable multiple push-tags />
+    </div>
+    <div class="form-group">
       <button type="button" class="btn btn-primary" @click="saveQuestion()">Save</button>
       &nbsp;
       <router-link :to="{ name: 'home' }" class="btn btn-secondary" role="button">Cancel</router-link>
@@ -25,12 +28,16 @@ import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/vue-editor';
 
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
+
 export default {
   props: {
     question: String
   },
   components: {
-    Editor
+    Editor,
+    vSelect
   },
   data() {
     return {
