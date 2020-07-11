@@ -6,14 +6,14 @@
         type="text"
         placeholder="What do you want to know"
         class="form-control"
-        v-model="question"
+        v-model="post.question"
       />
     </div>
     <div class="form-group">
       <editor initialEditType="wysiwyg" ref="toastuiEditor"></editor>
     </div>
     <div class="form-group">
-      <v-select taggable multiple push-tags />
+      <v-select taggable multiple push-tags :options="tags" label="name" v-model="post.tags" />
     </div>
     <div class="form-group">
       <button type="button" class="btn btn-primary" @click="saveQuestion()">Save</button>
@@ -31,6 +31,8 @@ import { Editor } from '@toast-ui/vue-editor';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 
+import { tagApiService } from '@/services/tag-api-service.js';
+
 export default {
   props: {
     question: String
@@ -43,12 +45,24 @@ export default {
     return {
       editorOptions: {
         hideModeSwitch: true
+      },
+      tags: null,
+      selectedTags: null,
+      post: {
+        question: null,
+        description: null,
+        tags: null
       }
     };
+  },
+  created() {
+    this.tags = tagApiService.getAll();
+    this.post.question = this.question;
   },
   methods: {
     saveQuestion() {
       // const markdown = this.$refs.toastuiEditor.invoke('getMarkdown');
+
       this.$router.push({ name: 'home' });
     }
   }
