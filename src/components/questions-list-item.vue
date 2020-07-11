@@ -13,7 +13,7 @@
         <span>{{question.creator}}</span> &bull;
         <span>{{question.creationDate.toLocaleDateString('en-gb', dateFormat)}}</span>
         <div class="question-tags">
-          <span class="badge badge-secondary" v-for="tag in question.tags" :key="tag">{{tag}}</span>
+          <span class="badge badge-secondary question-tag" v-for="tag in question.tags" :key="tag.id">{{tag.name}}</span>
         </div>
       </div>
     </div>
@@ -39,6 +39,9 @@ export default {
 }
 .question-tags {
   margin-bottom: 10px;
+}
+.question-tag {
+  margin-right: 5px;
 }
 .question-container {
   padding-top: 5px;

@@ -19,6 +19,7 @@
 
 <script>
 import QuestionsListItem from '@/components/questions-list-item.vue';
+import { questionApiService } from '@/services/question-api-service';
 
 export default {
   components: {
@@ -30,31 +31,10 @@ export default {
     };
   },
   created() {
-    this.getQuestions();
+    this.questions = questionApiService.getAll();
   },
   methods: {
-    getQuestions() {
-      this.questions = [
-        {
-          id: 1,
-          question: 'Как мне увидеть оповещения о вопросе?',
-          creator: 'Ilya Skavronskiy',
-          creationDate: new Date(),
-          votesCount: 1,
-          answersCount: 2,
-          tags: ['general']
-        },
-        {
-          id: 2,
-          question: 'Как часто вы выдаете билды в тестинг?',
-          creator: 'Ilya Skavronskiy',
-          creationDate: new Date(),
-          votesCount: 2,
-          answersCount: 0,
-          tags: ['build-system']
-        }
-      ];
-    }
+
   }
 };
 </script>
