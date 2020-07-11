@@ -1,3 +1,5 @@
+import { getNextId } from './helpers';
+
 export const localStorageService = {
   get(key, defaultValue = null) {
     const rawValue = localStorage.getItem(key);
@@ -13,6 +15,17 @@ export const localStorageService = {
   set(key, value) {
     const stringifiedValue = JSON.stringify(value);
     localStorage.setItem(key, stringifiedValue);
+  },
+  add(key, value) {
+    const collection = this.get(key);
+    const nextId = getNextId(collection);
+
+    value.id = nextId;
+
+    collection.push(value);
+    this.set(key, collection);
+
+    return value.id;
   }
 };
 

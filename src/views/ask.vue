@@ -32,6 +32,7 @@ import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 
 import { tagApiService } from '@/services/tag-api-service.js';
+import { questionApiService } from '@/services/question-api-service.js';
 
 export default {
   props: {
@@ -47,7 +48,6 @@ export default {
         hideModeSwitch: true
       },
       tags: null,
-      selectedTags: null,
       post: {
         question: null,
         description: null,
@@ -61,7 +61,13 @@ export default {
   },
   methods: {
     saveQuestion() {
-      // const markdown = this.$refs.toastuiEditor.invoke('getMarkdown');
+      this.post.description = this.$refs.toastuiEditor.invoke('getMarkdown');
+      this.post.creationDate = new Date();
+      this.post.creator = 'Ilya Skavronskiy';
+      this.post.votesCount = 0;
+      this.post.answersCount = 0;
+
+      questionApiService.save(this.post);
 
       this.$router.push({ name: 'home' });
     }
