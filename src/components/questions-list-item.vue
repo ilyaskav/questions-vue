@@ -6,7 +6,7 @@
         <div class="votes-label">{{question.votesCount === 1 ? 'vote' : 'votes'}}</div>
       </div>
       <div class="col-md-11 question-info">
-        <h5>{{question.question}}</h5>
+        <router-link :to="{ name: 'answer', params: { questionId: question.id }}"> <h5>{{question.question}}</h5> </router-link>
         <span class="answers-counter" :class="{'text-danger': question.answersCount === 0}">
           {{question.answersCount}}
         </span> answers &bull;

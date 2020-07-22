@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@toast-ui/vue-editor": "^2.2.0",
-    "bootstrap": "^4.5.0",
+    "bootstrap-vue": "^2.15.0",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
@@ -53,7 +53,12 @@
         "always"
       ],
       "space-before-function-paren": "off",
-      "padded-blocks": "warn"
+      "padded-blocks": "warn",
+      "no-debugger": "warn",
+      "operator-linebreak": [
+        "error",
+        "before"
+      ]
     }
   },
   "browserslist": [

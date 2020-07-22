@@ -10,7 +10,7 @@
       />
     </div>
     <div class="form-group">
-      <editor initialEditType="wysiwyg" ref="toastuiEditor"></editor>
+      <editor :initialValue="post.description" initialEditType="wysiwyg" ref="toastuiEditor"></editor>
     </div>
     <div class="form-group">
       <v-select taggable multiple push-tags :options="tags" label="name" v-model="post.tags" />
@@ -32,11 +32,15 @@ import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 
 import { tagApiService } from '@/services/tag-api-service.js';
-import { questionApiService } from '@/services/question-api-service.js';
+import { questionApiService } from '@/services/question-api-service';
 
 export default {
   props: {
-    question: String
+    question: String,
+    questionId: {
+      type: Number,
+      required: false
+    }
   },
   components: {
     Editor,
@@ -44,9 +48,6 @@ export default {
   },
   data() {
     return {
-      editorOptions: {
-        hideModeSwitch: true
-      },
       tags: null,
       post: {
         question: null,
@@ -57,15 +58,23 @@ export default {
   },
   created() {
     this.tags = tagApiService.getAll();
-    this.post.question = this.question;
+
+    if (this.questionId) {
+      this.post = questionApiService.getById(this.questionId);
+    } else {
+      this.post.question = this.question;
+    }
   },
   methods: {
     saveQuestion() {
       this.post.description = this.$refs.toastuiEditor.invoke('getMarkdown');
-      this.post.creationDate = new Date();
-      this.post.creator = 'Ilya Skavronskiy';
-      this.post.votesCount = 0;
-      this.post.answersCount = 0;
+
+      if (!this.post.id) {
+        this.post.creationDate = new Date();
+        this.post.creator = 'Ilya Skavronskiy';
+        this.post.votesCount = 0;
+        this.post.answersCount = 0;
+      }
 
       questionApiService.save(this.post);
 
