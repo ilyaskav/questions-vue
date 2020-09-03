@@ -1,10 +1,10 @@
 <template>
   <div class="vote-counter">
-    <b-button size="sm" variant="outline-secondary" class="rounded-circle" @click="$emit('vote-up')">
+    <b-button size="sm" variant="outline-secondary" class="rounded-circle px-1 py-0" @click="$emit('vote-up')">
       <b-icon-chevron-up></b-icon-chevron-up>
     </b-button>
-    <h4>{{votes}}</h4>
-    <b-button size="sm" variant="outline-secondary" class="rounded-circle" @click="$emit('vote-down')">
+    <h4 class="mt-1">{{votes}}</h4>
+    <b-button size="sm" variant="outline-secondary" class="rounded-circle px-1 py-0" @click="$emit('vote-down')">
       <b-icon-chevron-down></b-icon-chevron-down>
     </b-button>
   </div>

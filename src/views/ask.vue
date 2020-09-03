@@ -10,7 +10,7 @@
       />
     </div>
     <div class="form-group">
-      <editor :initialValue="post.description" initialEditType="wysiwyg" ref="toastuiEditor"></editor>
+      <editor :initialValue="post.message.text" initialEditType="wysiwyg" ref="toastuiEditor"></editor>
     </div>
     <div class="form-group">
       <v-select taggable multiple push-tags :options="tags" label="name" v-model="post.tags" />
@@ -51,8 +51,8 @@ export default {
       tags: null,
       post: {
         question: null,
-        description: null,
-        tags: null
+        tags: null,
+        message: {}
       }
     };
   },
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     saveQuestion() {
-      this.post.description = this.$refs.toastuiEditor.invoke('getMarkdown');
+      this.post.message.text = this.$refs.toastuiEditor.invoke('getMarkdown');
 
       if (!this.post.id) {
         this.post.creationDate = new Date();

@@ -51,9 +51,7 @@ export default {
         creationDate: new Date(),
         votesCount: 1,
         answersCount: 2,
-        acceptedAnswerId: null,
         tags: [{ id: 1, name: 'general' }],
-        answers: [],
         messageId: 1
       },
       {
@@ -63,9 +61,7 @@ export default {
         creationDate: new Date(),
         votesCount: 2,
         answersCount: 0,
-        acceptedAnswerId: null,
         tags: [{ id: 2, name: 'build-system' }],
-        answers: [],
         messageId: 2
       }
     ];
@@ -76,13 +72,17 @@ export default {
     const messages = [
       {
         id: 1,
-        text: 'A?'
+        text: 'A?',
+        questionId: 1,
+        creationDate: new Date(),
+        creatorId: 1
       },
       {
         id: 2,
         text: '???',
-        creator: 'Ilya Skavronskiy',
-        creationDate: new Date()
+        questionId: 2,
+        creationDate: new Date(),
+        creatorId: 1
       }
     ];
 

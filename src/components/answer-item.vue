@@ -7,10 +7,19 @@
           @vote-up="upvote(message.messageId)"
           @vote-down="downvote(message.messageId)"
         ></vote-counter>
+        <b-button
+          size="sm"
+          variant="outline-success"
+          class="rounded-circle px-1 py-0"
+          @click="acceptAnswer()"
+          v-bind:class="{ 'btn-success': message.accepted }"
+        >
+          <b-icon-check2></b-icon-check2>
+        </b-button>
       </div>
       <div class="col-md-11">
         <div>
-          {{message.creator}} &bull;
+          {{message.creator.name }} {{ message.creator.surname}} &bull;
           <span>{{message.creationDate.toLocaleDateString('en-gb', dateFormat)}}</span>
         </div>
         <div class="message-description">
@@ -30,8 +39,10 @@ import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/vue-editor';
 import VoteCounter from '@/components/vote-counter';
+import { BIconCheck2 } from 'bootstrap-vue';
 
 import { voteApiService } from '@/services/vote-api-service';
+import { messageApiService } from '@/services/message-api-service';
 
 export default {
   props: {
@@ -39,7 +50,8 @@ export default {
   },
   components: {
     Viewer,
-    VoteCounter
+    VoteCounter,
+    BIconCheck2
   },
   data() {
     return {
@@ -48,13 +60,18 @@ export default {
   },
   methods: {
     upvote(messageId) {
-      voteApiService.upvote(messageId).then(voteChanged => {
-        if (voteChanged) this.question.votesCount++;
+      voteApiService.upvote(messageId).then((voteChanged) => {
+        if (voteChanged) this.message.votesCount++;
       });
     },
     downvote(messageId) {
-      voteApiService.downvote(messageId).then(voteChanged => {
-        if (voteChanged) this.question.votesCount--;
+      voteApiService.downvote(messageId).then((voteChanged) => {
+        if (voteChanged) this.message.votesCount--;
+      });
+    },
+    acceptAnswer() {
+      messageApiService.acceptAnswer(this.message.id).then(() => {
+        this.message.accepted = true;
       });
     },
     deleteAnswer() {}
@@ -65,5 +82,8 @@ export default {
 <style scoped>
 .message-item {
   border-top: lightgray 2px solid;
+}
+.vote-section {
+  text-align: center;
 }
 </style>

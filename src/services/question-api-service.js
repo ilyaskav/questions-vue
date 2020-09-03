@@ -19,13 +19,14 @@ export const questionApiService = {
 
     const allAnswers = localStorageService.get('messages');
     if (allAnswers) {
-      question.answers = allAnswers.filter(a => a.questionId === id);
+      question.answers = allAnswers.filter(a => a.questionId === id && a.id !== question.messageId);
     }
 
     return question;
   },
   save(post) {
     post.tags = saveTags(post.tags);
+    post.messageId = saveMessage(post.message);
 
     if (post.id) {
       localStorageService.edit('questions', post);
@@ -48,4 +49,18 @@ function saveTags(tags) {
   });
 
   return tags;
+}
+
+function saveMessage(message) {
+  if (message.id) {
+    const messages = localStorageService.get('messages');
+    const messageFromStorage = messages.find(m => m.id === message.id);
+    if (!message) throw Error(`Message with id: ${message.id} was not found`);
+
+    messageFromStorage.text = message.text;
+
+    return localStorageService.edit('messages', messageFromStorage);
+  } else {
+    return localStorageService.add('messages', message);
+  }
 }

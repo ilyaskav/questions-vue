@@ -8,9 +8,6 @@
           @vote-up="upvote(question.messageId)"
           @vote-down="downvote(question.messageId)"
         ></vote-counter>
-        <b-button size="sm" variant="secondary" class="rounded-circle">
-          <b-icon-check2></b-icon-check2>
-        </b-button>
       </div>
       <div class="col-md-11">
         <div>
@@ -34,7 +31,7 @@
       </div>
     </div>
     <div class="form-group">
-      <h5>{{question.answersCount}} {{question.answersCount === 1 ? 'answer' : 'answers'}}</h5>
+      <h5>{{question.answers.length}} {{question.answers.length === 1 ? 'answer' : 'answers'}}</h5>
       <answer-item v-for="answer in question.answers" :message="answer" :key="answer.id"></answer-item>
     </div>
     <div class="form-group">
@@ -53,7 +50,6 @@
 import { questionApiService } from '@/services/question-api-service';
 import { messageApiService } from '@/services/message-api-service';
 import { voteApiService } from '@/services/vote-api-service';
-import { BIconCheck2 } from 'bootstrap-vue';
 import AnswerItem from '@/components/answer-item';
 import VoteCounter from '@/components/vote-counter';
 
@@ -67,7 +63,6 @@ export default {
     questionId: Number
   },
   components: {
-    BIconCheck2,
     Editor,
     Viewer,
     AnswerItem,
@@ -86,23 +81,24 @@ export default {
     saveAnswer() {
       const answer = {
         questionId: this.question.id,
-        creator: 'Ilya Skavronskiy',
-        creationDate: new Date(),
         votesCount: 0,
-        text: this.$refs.toastuiEditor.invoke('getMarkdown')
+        text: this.$refs.toastuiEditor.invoke('getMarkdown'),
+        accepted: false
       };
 
-      const savedAnswer = messageApiService.save(answer);
-      this.question.answers.push(savedAnswer);
+      messageApiService.save(answer).then((savedAnswer) => {
+        this.question.answers.push(savedAnswer);
+        this.$refs.toastuiEditor.invoke('setMarkdown', '');
+      });
     },
     deleteQuestion() {},
     upvote(messageId) {
-      voteApiService.upvote(messageId).then(voteChanged => {
+      voteApiService.upvote(messageId).then((voteChanged) => {
         if (voteChanged) this.question.votesCount++;
       });
     },
     downvote(messageId) {
-      voteApiService.downvote(messageId).then(voteChanged => {
+      voteApiService.downvote(messageId).then((voteChanged) => {
         if (voteChanged) this.question.votesCount--;
       });
     }
