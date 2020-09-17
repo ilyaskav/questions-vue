@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="question">
     <h3>{{question.question}}</h3>
     <div class="row">
       <div class="col-md-1">
@@ -11,7 +11,7 @@
       </div>
       <div class="col-md-11">
         <div>
-          {{question.creator}} &bull;
+          {{question.creator.name}} {{question.creator.surname}} &bull;
           <span>{{question.creationDate.toLocaleDateString('en-gb', dateFormat)}}</span>
         </div>
         <div class="question-description">
@@ -32,7 +32,13 @@
     </div>
     <div class="form-group">
       <h5>{{question.answers.length}} {{question.answers.length === 1 ? 'answer' : 'answers'}}</h5>
-      <answer-item v-for="answer in question.answers" :message="answer" :key="answer.id"></answer-item>
+      <answer-item
+        v-for="answer in question.answers"
+        :message="answer"
+        :key="answer.id"
+        @on-edit="editMessage"
+        @on-remove="deleteMessage"
+      ></answer-item>
     </div>
     <div class="form-group">
       <h5>Your answer</h5>
@@ -74,8 +80,14 @@ export default {
       dateFormat: { year: 'numeric', month: 'long', day: 'numeric' }
     };
   },
-  created() {
-    this.question = questionApiService.getQuestionWithAnswers(this.questionId);
+  beforeRouteEnter(to, from, next) {
+    questionApiService
+      .getQuestionWithAnswers(+to.params.questionId)
+      .then((response) => {
+        next((vm) => {
+          vm.question = response;
+        });
+      });
   },
   methods: {
     saveAnswer() {
@@ -91,7 +103,19 @@ export default {
         this.$refs.toastuiEditor.invoke('setMarkdown', '');
       });
     },
-    deleteQuestion() {},
+    deleteQuestion() {
+      this.$bvModal
+        .msgBoxConfirm('Are you sure you want to delete this question?', {
+          title: 'Confirmation'
+        })
+        .then((confirmed) => {
+          if (!confirmed) return;
+
+          questionApiService.delete(this.question.id).then(() => {
+            this.$router.push({ name: 'home' });
+          });
+        });
+    },
     upvote(messageId) {
       voteApiService.upvote(messageId).then((voteChanged) => {
         if (voteChanged) this.question.votesCount++;
@@ -101,6 +125,26 @@ export default {
       voteApiService.downvote(messageId).then((voteChanged) => {
         if (voteChanged) this.question.votesCount--;
       });
+    },
+    editMessage(messageId) {
+
+    },
+    deleteMessage(messageId) {
+      this.$bvModal
+        .msgBoxConfirm('Are you sure you want to delete this message?', {
+          title: 'Confirmation'
+        })
+        .then((confirmed) => {
+          if (!confirmed) return;
+
+          messageApiService.delete(messageId).then(() => {
+            questionApiService
+              .getQuestionWithAnswers(this.questionId)
+              .then((response) => {
+                this.question = response;
+              });
+          });
+        });
     }
   }
 };

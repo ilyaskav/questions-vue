@@ -31,7 +31,7 @@ export default {
     };
   },
   created() {
-    this.questions = questionApiService.getAll();
+    this.questions = questionApiService.getQuesionsList();
   },
   methods: {
 

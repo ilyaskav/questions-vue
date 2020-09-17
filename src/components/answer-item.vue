@@ -25,9 +25,9 @@
         <div class="message-description">
           <viewer :initialValue="message.text"></viewer>
         </div>
-        <div>
-          <b-button :to="{ name: 'ask', params: { questionId: 1 } }" variant="link">Edit</b-button>&bull;
-          <b-button @click="deleteAnswer()" variant="link">Delete</b-button>
+        <div v-if="message.creatorId === currentUserId">
+          <b-button @click="$emit('on-edit', message.id)" variant="link">Edit</b-button>&bull;
+          <b-button @click="$emit('on-remove', message.id)" variant="link">Delete</b-button>
         </div>
       </div>
     </div>
@@ -43,6 +43,7 @@ import { BIconCheck2 } from 'bootstrap-vue';
 
 import { voteApiService } from '@/services/vote-api-service';
 import { messageApiService } from '@/services/message-api-service';
+import { userService } from '@/services/user-service';
 
 export default {
   props: {
@@ -55,7 +56,8 @@ export default {
   },
   data() {
     return {
-      dateFormat: { year: 'numeric', month: 'long', day: 'numeric' }
+      dateFormat: { year: 'numeric', month: 'long', day: 'numeric' },
+      currentUserId: userService.getCurrent().id
     };
   },
   methods: {
@@ -73,8 +75,7 @@ export default {
       messageApiService.acceptAnswer(this.message.id).then(() => {
         this.message.accepted = true;
       });
-    },
-    deleteAnswer() {}
+    }
   }
 };
 </script>

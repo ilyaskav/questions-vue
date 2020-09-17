@@ -40,27 +40,25 @@ export default {
     ];
 
     localStorageService.set('users', users);
-    sessionStorage.setItem('CURRENT_USER_ID', 1);
+    sessionStorage.setItem('CURRENT_USER_ID', 2);
   },
   insertQuestions() {
     const questions = [
       {
         id: 1,
         question: 'Как мне увидеть оповещения о вопросе?',
-        creator: 'Ilya Skavronskiy',
+        creatorId: 1,
         creationDate: new Date(),
         votesCount: 1,
-        answersCount: 2,
         tags: [{ id: 1, name: 'general' }],
         messageId: 1
       },
       {
         id: 2,
         question: 'Как часто вы выдаете билды в тестинг?',
-        creator: 'Ilya Skavronskiy',
+        creatorId: 1,
         creationDate: new Date(),
         votesCount: 2,
-        answersCount: 0,
         tags: [{ id: 2, name: 'build-system' }],
         messageId: 2
       }
@@ -83,6 +81,20 @@ export default {
         questionId: 2,
         creationDate: new Date(),
         creatorId: 1
+      },
+      {
+        id: 3,
+        text: 'Clarification - I am a table',
+        questionId: 1,
+        creationDate: new Date(),
+        creatorId: 1
+      },
+      {
+        id: 4,
+        text: 'So why cant you ?',
+        questionId: 1,
+        creationDate: new Date(),
+        creatorId: 2
       }
     ];
 
@@ -92,19 +104,19 @@ export default {
     const votes = [
       {
         id: 1,
-        questionId: 1,
+        messageId: 1,
         userId: 1,
         isUpvote: true
       },
       {
         id: 2,
-        questionId: 2,
+        messageId: 2,
         userId: 2,
         isUpvote: true
       },
       {
         id: 3,
-        questionId: 2,
+        messageId: 2,
         userId: 3,
         isUpvote: true
       }

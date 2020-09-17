@@ -70,8 +70,6 @@ export default {
       this.post.message.text = this.$refs.toastuiEditor.invoke('getMarkdown');
 
       if (!this.post.id) {
-        this.post.creationDate = new Date();
-        this.post.creator = 'Ilya Skavronskiy';
         this.post.votesCount = 0;
         this.post.answersCount = 0;
       }

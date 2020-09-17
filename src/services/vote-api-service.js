@@ -5,22 +5,22 @@ export const voteApiService = {
   getById(id) {
 
   },
-  getByQuestionId(questionId, userId = null) {
+  getByMessageId(messageId, userId = null) {
     const collection = this.getAll();
-    const vote = collection.find(v => v.questionId === questionId
-      && (v.userId === userId || userService.getCurrent()));
+    const vote = collection.find(v => v.questionId === messageId
+      && (v.userId === userId || userService.getCurrent().id));
 
     return vote || null;
   },
-  upvote(questionId) {
+  upvote(messageId) {
     return new Promise((resolve, reject) => {
-      const voteChanged = vote(questionId, true);
+      const voteChanged = vote(messageId, true);
       resolve(voteChanged);
     });
   },
-  downvote(questionId) {
+  downvote(messageId) {
     return new Promise((resolve, reject) => {
-      const voteChanged = vote(questionId, false);
+      const voteChanged = vote(messageId, false);
       resolve(voteChanged);
     });
   },
@@ -29,9 +29,9 @@ export const voteApiService = {
   }
 };
 
-function vote(questionId, isUpvote) {
+function vote(messageId, isUpvote) {
   const currentUser = userService.getCurrent();
-  let vote = voteApiService.getByQuestionId(questionId, currentUser.id);
+  let vote = voteApiService.getByMessageId(messageId, currentUser.id);
 
   if (vote) {
     if (vote.isUpvote === isUpvote) return false;
@@ -40,7 +40,7 @@ function vote(questionId, isUpvote) {
     localStorageService.edit('votes', vote);
   } else {
     vote = {
-      questionId: questionId,
+      questionId: messageId,
       userId: currentUser.id,
       isUpvote: isUpvote
     };

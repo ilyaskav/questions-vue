@@ -39,6 +39,19 @@ export const messageApiService = {
 
       return this.save(message);
     });
+  },
+  delete(id) {
+    return this.getById(id).then((message) => {
+      if (message.creatorId !== userService.getCurrent().id) {
+        return Promise.reject(new Error('Only author can delete a message'));
+      }
+
+      const allMessages = this.getAll();
+      const messagesWithoutRemoved = allMessages.filter(m => m.id !== message.id);
+      localStorageService.set('messages', messagesWithoutRemoved);
+
+      return Promise.resolve();
+    });
   }
 };
 
