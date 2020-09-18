@@ -9,8 +9,11 @@ export const questionApiService = {
     if (!question) return null;
 
     const allMessages = localStorageService.get('messages', []);
-    question.message = allMessages.find((m) => m.id === question.messageId);
-    question.answersCount = count(allMessages, (m) => m.questionId === id && !m.initial);
+    question.message = allMessages.find((m) => m.questionId === question.id && m.initial === true);
+    question.answersCount = count(allMessages, (m) => m.questionId === question.id && !m.initial);
+
+    const allVotes = localStorageService.get('votes');
+    question.votesCount = count(allVotes, (v) => v.messageId === question.message.id && v.isUpvote === true);
 
     return question;
   },
@@ -20,9 +23,9 @@ export const questionApiService = {
       return Promise.reject(new Error('Question with that id was not found'));
     }
 
-    const allAnswers = localStorageService.get('messages');
-    if (allAnswers) {
-      question.answers = allAnswers.filter(a => a.questionId === id && a.id !== question.messageId);
+    const allMessages = localStorageService.get('messages');
+    if (allMessages) {
+      question.answers = allMessages.filter(m => m.questionId === question.id && !m.initial);
     }
 
     const allUsers = localStorageService.get('users');
@@ -30,23 +33,27 @@ export const questionApiService = {
       question.creator = allUsers.find(u => u.id === question.creatorId);
     }
 
+    const allVotes = localStorageService.get('votes');
     question.answers.forEach((a) => {
       a.creator = allUsers.find(u => u.id === a.creatorId);
+      a.votesCount = count(allVotes, (v) => v.messageId === a.id && v.isUpvote === true);
     });
 
     return Promise.resolve(question);
   },
   save(post) {
-    post.creatorId = userService.getCurrent().id;
-    post.creationDate = new Date();
     post.tags = saveTags(post.tags);
-    post.messageId = saveMessage(post.message);
 
     if (post.id) {
       localStorageService.edit('questions', post);
     } else {
-      localStorageService.add('questions', post);
+      post.creatorId = userService.getCurrent().id;
+      post.creationDate = new Date();
+      post.id = localStorageService.add('questions', post);
     }
+
+    post.questionId = post.id;
+    saveMessage(post.message);
   },
   getAll() {
     return localStorageService.get('questions', []);
@@ -55,10 +62,14 @@ export const questionApiService = {
     const allQuestions = this.getAll();
     const allUsers = localStorageService.get('users');
     const allMessages = localStorageService.get('messages');
+    const allVotes = localStorageService.get('votes');
 
     allQuestions.forEach((q) => {
+      const initialMessage = allMessages.find(m => m.questionId === q.id && m.initial === true);
+
       q.creator = allUsers.find(u => u.id === q.creatorId);
-      q.answersCount = count(allMessages, (m) => m.questionId === q.id) - 1;
+      q.answersCount = count(allMessages, (m) => m.questionId === q.id && !m.initial);
+      q.votesCount = count(allVotes, (v) => v.messageId === initialMessage.id && v.isUpvote === true);
     });
 
     return allQuestions;
@@ -103,6 +114,10 @@ function saveMessage(message) {
 
     return localStorageService.edit('messages', messageFromStorage);
   } else {
+    message.initial = true;
+    message.creatorId = userService.getCurrent().id;
+    message.creationDate = new Date();
+
     return localStorageService.add('messages', message);
   }
 }

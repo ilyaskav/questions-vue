@@ -7,15 +7,9 @@
           @vote-up="upvote(message.messageId)"
           @vote-down="downvote(message.messageId)"
         ></vote-counter>
-        <b-button
-          size="sm"
-          variant="outline-success"
-          class="rounded-circle px-1 py-0"
-          @click="acceptAnswer()"
-          v-bind:class="{ 'btn-success': message.accepted }"
-        >
-          <b-icon-check2></b-icon-check2>
-        </b-button>
+        <p class="h4" v-if="message.accepted">
+          <b-icon-check-circle-fill variant="success"></b-icon-check-circle-fill>
+        </p>
       </div>
       <div class="col-md-11">
         <div>
@@ -25,9 +19,14 @@
         <div class="message-description">
           <viewer :initialValue="message.text"></viewer>
         </div>
-        <div v-if="message.creatorId === currentUserId">
-          <b-button @click="$emit('on-edit', message.id)" variant="link">Edit</b-button>&bull;
-          <b-button @click="$emit('on-remove', message.id)" variant="link">Delete</b-button>
+        <div>
+          <span v-if="questionCreator === currentUserId && !message.accepted">
+            <b-button @click="acceptAnswer()" variant="link">Accept Answer</b-button>&bull;
+          </span>
+          <span v-if="message.creatorId === currentUserId">
+            <b-button @click="$emit('on-edit', message.id)" variant="link">Edit</b-button>&bull;
+            <b-button @click="$emit('on-remove', message.id)" variant="link">Delete</b-button>
+          </span>
         </div>
       </div>
     </div>
@@ -39,7 +38,7 @@ import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/vue-editor';
 import VoteCounter from '@/components/vote-counter';
-import { BIconCheck2 } from 'bootstrap-vue';
+import { BIconCheckCircleFill } from 'bootstrap-vue';
 
 import { voteApiService } from '@/services/vote-api-service';
 import { messageApiService } from '@/services/message-api-service';
@@ -47,12 +46,13 @@ import { userService } from '@/services/user-service';
 
 export default {
   props: {
-    message: Object
+    message: Object,
+    questionCreator: Number
   },
   components: {
     Viewer,
     VoteCounter,
-    BIconCheck2
+    BIconCheckCircleFill
   },
   data() {
     return {

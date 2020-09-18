@@ -29,11 +29,19 @@ export const messageApiService = {
     return localStorageService.get('messages');
   },
   acceptAnswer(answerId) {
-    const collection = this.getAll();
+    const allMessages = this.getAll();
 
     return this.getById(answerId).then((message) => {
-      const questionAlreadyHasAcceptedAnswer = collection.some(m => m.questionId === message.questionId && m.accepted);
-      if (questionAlreadyHasAcceptedAnswer) return Promise.reject(new Error('Question already has accepted answer'));
+      const allQuestions = localStorageService.get('questions');
+      const question = allQuestions.find(q => q.id === message.questionId);
+      if (question.creatorId !== userService.getCurrent().id) {
+        return Promise.reject(new Error('Only person who asked a question can accept an answer'));
+      }
+
+      const questionAlreadyHasAcceptedAnswer = allMessages.some(m => m.questionId === message.questionId && m.accepted);
+      if (questionAlreadyHasAcceptedAnswer) {
+        return Promise.reject(new Error('Question already has accepted answer'));
+      }
 
       message.accepted = true;
 
@@ -45,6 +53,8 @@ export const messageApiService = {
       if (message.creatorId !== userService.getCurrent().id) {
         return Promise.reject(new Error('Only author can delete a message'));
       }
+
+      deleteVotesByMessageId(message.id);
 
       const allMessages = this.getAll();
       const messagesWithoutRemoved = allMessages.filter(m => m.id !== message.id);
@@ -58,4 +68,11 @@ export const messageApiService = {
 function getUser(id) {
   const users = localStorageService.get('users');
   return users.find(u => u.id === id) || null;
+}
+
+function deleteVotesByMessageId(messageId) {
+  const votes = localStorageService.get('votes');
+  const votesWithoutRemoved = votes.filter(v => v.messageId !== messageId);
+
+  localStorageService.set('votes', votesWithoutRemoved);
 }

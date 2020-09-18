@@ -69,11 +69,6 @@ export default {
     saveQuestion() {
       this.post.message.text = this.$refs.toastuiEditor.invoke('getMarkdown');
 
-      if (!this.post.id) {
-        this.post.votesCount = 0;
-        this.post.answersCount = 0;
-      }
-
       questionApiService.save(this.post);
 
       this.$router.push({ name: 'home' });

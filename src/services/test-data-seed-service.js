@@ -25,7 +25,7 @@ export default {
       {
         id: 1,
         name: 'Ilya',
-        surname: 'Skavronsliy'
+        surname: 'Skavronskiy'
       },
       {
         id: 2,
@@ -49,18 +49,14 @@ export default {
         question: 'Как мне увидеть оповещения о вопросе?',
         creatorId: 1,
         creationDate: new Date(),
-        votesCount: 1,
-        tags: [{ id: 1, name: 'general' }],
-        messageId: 1
+        tags: [{ id: 1, name: 'general' }]
       },
       {
         id: 2,
         question: 'Как часто вы выдаете билды в тестинг?',
         creatorId: 1,
         creationDate: new Date(),
-        votesCount: 2,
-        tags: [{ id: 2, name: 'build-system' }],
-        messageId: 2
+        tags: [{ id: 2, name: 'build-system' }]
       }
     ];
 
@@ -73,14 +69,16 @@ export default {
         text: 'A?',
         questionId: 1,
         creationDate: new Date(),
-        creatorId: 1
+        creatorId: 1,
+        initial: true
       },
       {
         id: 2,
         text: '???',
         questionId: 2,
         creationDate: new Date(),
-        creatorId: 1
+        creatorId: 1,
+        initial: true
       },
       {
         id: 3,

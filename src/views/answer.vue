@@ -35,6 +35,7 @@
       <answer-item
         v-for="answer in question.answers"
         :message="answer"
+        :questionCreator="question.creatorId"
         :key="answer.id"
         @on-edit="editMessage"
         @on-remove="deleteMessage"
