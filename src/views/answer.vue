@@ -24,9 +24,14 @@
             :key="tag.id"
           >{{tag.name}}</span>
         </div>
-        <div>
-          <b-button :to="{ name: 'ask', params: { questionId: questionId } }" variant="link">Edit</b-button>&bull;
-          <b-button @click="deleteQuestion()" variant="link">Delete</b-button>
+        <div v-if="question.creatorId === currentUserId">
+          <b-button
+            :to="{ name: 'ask', params: { questionId: questionId } }"
+            variant="link"
+            class="link-btn">
+            Edit
+          </b-button>
+          <b-button @click="deleteQuestion()" variant="link" class="link-btn">Delete</b-button>
         </div>
       </div>
     </div>
@@ -43,13 +48,17 @@
     </div>
     <div class="form-group">
       <h5>Your answer</h5>
-      <editor initialEditType="wysiwyg" ref="toastuiEditor"></editor>
+      <editor initialEditType="wysiwyg" ref="createMessageEditor"></editor>
     </div>
     <div class="form-group">
       <button type="button" class="btn btn-primary" @click="saveAnswer()">Save</button>
       &nbsp;
       <router-link :to="{ name: 'home' }" class="btn btn-secondary" role="button">Cancel</router-link>
     </div>
+
+    <b-modal id="edit-message-modal" title="Edit Message" size="lg" :static="true">
+      <editor initialEditType="wysiwyg" ref="editMessageEditor" ></editor>
+  </b-modal>
   </div>
 </template>
 
@@ -57,6 +66,7 @@
 import { questionApiService } from '@/services/question-api-service';
 import { messageApiService } from '@/services/message-api-service';
 import { voteApiService } from '@/services/vote-api-service';
+import { userService } from '@/services/user-service';
 import AnswerItem from '@/components/answer-item';
 import VoteCounter from '@/components/vote-counter';
 
@@ -78,7 +88,12 @@ export default {
   data() {
     return {
       question: null,
-      dateFormat: { year: 'numeric', month: 'long', day: 'numeric' }
+      dateFormat: { year: 'numeric', month: 'long', day: 'numeric' },
+      currentUserId: userService.getCurrent().id,
+      editMessageEditorOptions: {
+        minHeight: '150px'
+      },
+      editedMessage: null
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -95,13 +110,13 @@ export default {
       const answer = {
         questionId: this.question.id,
         votesCount: 0,
-        text: this.$refs.toastuiEditor.invoke('getMarkdown'),
+        text: this.$refs.createMessageEditor.invoke('getMarkdown'),
         accepted: false
       };
 
       messageApiService.save(answer).then((savedAnswer) => {
         this.question.answers.push(savedAnswer);
-        this.$refs.toastuiEditor.invoke('setMarkdown', '');
+        this.$refs.createMessageEditor.invoke('setMarkdown', '');
       });
     },
     deleteQuestion() {
@@ -128,7 +143,9 @@ export default {
       });
     },
     editMessage(messageId) {
-
+      this.editedMessage = this.question.answers.find(a => a.id === messageId);
+      this.$refs.editMessageEditor.invoke('setMarkdown', this.editedMessage.text);
+      this.$bvModal.show('edit-message-modal');
     },
     deleteMessage(messageId) {
       this.$bvModal
@@ -154,5 +171,20 @@ export default {
 <style scoped>
 .question-description {
   min-height: 32px;
+}
+.link-btn {
+  box-shadow: none;
+  padding: 0;
+  color: rgb(92, 92, 92);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.link-btn:not(:last-child)::after {
+  content: '•';
+  position: relative;
+  left: 6px;
+  padding-right: 10px;
+  cursor: default;
 }
 </style>

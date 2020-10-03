@@ -21,11 +21,11 @@
         </div>
         <div>
           <span v-if="questionCreator === currentUserId && !message.accepted">
-            <b-button @click="acceptAnswer()" variant="link">Accept Answer</b-button>&bull;
+            <b-button @click="acceptAnswer()" variant="link" class="link-btn">Accept Answer</b-button>&bull;
           </span>
           <span v-if="message.creatorId === currentUserId">
-            <b-button @click="$emit('on-edit', message.id)" variant="link">Edit</b-button>&bull;
-            <b-button @click="$emit('on-remove', message.id)" variant="link">Delete</b-button>
+            <b-button @click="$emit('on-edit', message.id)" variant="link" class="link-btn">Edit</b-button>
+            <b-button @click="$emit('on-remove', message.id)" variant="link" class="link-btn">Delete</b-button>
           </span>
         </div>
       </div>
@@ -83,8 +83,23 @@ export default {
 <style scoped>
 .message-item {
   border-top: lightgray 2px solid;
+  padding: 15px 0;
 }
 .vote-section {
   text-align: center;
+}
+.link-btn {
+  box-shadow: none;
+  padding: 0;
+  color: rgb(92, 92, 92);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+.link-btn:not(:last-child)::after {
+  content: '•';
+  position: relative;
+  left: 6px;
+  padding-right: 10px;
+  cursor: default;
 }
 </style>

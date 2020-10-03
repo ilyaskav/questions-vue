@@ -52,7 +52,7 @@ export const questionApiService = {
       post.id = localStorageService.add('questions', post);
     }
 
-    post.questionId = post.id;
+    post.message.questionId = post.id;
     saveMessage(post.message);
   },
   getAll() {
