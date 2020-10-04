@@ -11,10 +11,23 @@ const routes = [
     component: Home
   },
   {
-    path: '/ask',
+    path: '/ask/:questionId',
     name: 'ask',
-    props: (route) => ({ question: route.query.question }),
+    props: (route) => ({
+      question: route.query.question,
+      questionId: +route.params.questionId || null
+    }),
     component: () => import(/* webpackChunkName: "ask" */ '../views/ask.vue')
+  },
+  {
+    path: '/give-answer/:questionId',
+    name: 'answer',
+    props: (route) => {
+      const props = { ...route.params };
+      props.questionId = +props.questionId;
+      return props;
+    },
+    component: () => import(/* webpackChunkName: "answer" */ '../views/answer.vue')
   }
 ];
 

@@ -26,6 +26,16 @@ export const localStorageService = {
     this.set(key, collection);
 
     return value.id;
+  },
+  edit(key, newValue) {
+    if (!newValue.id) throw new Error('Item id is not set');
+
+    const collection = this.get(key);
+    const editedItemIndex = collection.findIndex(i => i.id === newValue.id);
+
+    collection[editedItemIndex] = newValue;
+
+    this.set(key, collection);
   }
 };
 

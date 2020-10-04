@@ -6,11 +6,11 @@
         <div class="votes-label">{{question.votesCount === 1 ? 'vote' : 'votes'}}</div>
       </div>
       <div class="col-md-11 question-info">
-        <h5>{{question.question}}</h5>
+        <router-link :to="{ name: 'answer', params: { questionId: question.id }}"> <h5>{{question.question}}</h5> </router-link>
         <span class="answers-counter" :class="{'text-danger': question.answersCount === 0}">
           {{question.answersCount}}
         </span> answers &bull;
-        <span>{{question.creator}}</span> &bull;
+        <span>{{question.creator.name}} {{question.creator.surname}}</span> &bull;
         <span>{{question.creationDate.toLocaleDateString('en-gb', dateFormat)}}</span>
         <div class="question-tags">
           <span class="badge badge-secondary question-tag" v-for="tag in question.tags" :key="tag.id">{{tag.name}}</span>
