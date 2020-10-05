@@ -2,13 +2,14 @@
   <div class="questions-list">
     <ul class="nav nav-pills">
       <li class="nav-item">
-        <a class="nav-link active" href="#">Popular</a>
+        <router-link :to="{name: 'home', query: {q: 'popular'}}" class="nav-link active">Popular</router-link>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Recent</a>
+        <router-link :to="{name: 'home', query: {q: 'recent'}}" class="nav-link">Recent</router-link>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Unanswered</a>
+        <a class="nav-link" href="#"></a>
+        <router-link :to="{name: 'home', query: {q: 'unanswered'}}" class="nav-link">Unanswered</router-link>
       </li>
     </ul>
     <div class="list-items-container">
@@ -33,9 +34,7 @@ export default {
   created() {
     this.questions = questionApiService.getQuesionsList();
   },
-  methods: {
-
-  }
+  methods: {}
 };
 </script>
 

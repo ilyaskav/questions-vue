@@ -17,7 +17,7 @@
           <span>{{message.creationDate.toLocaleDateString('en-gb', dateFormat)}}</span>
         </div>
         <div class="message-description">
-          <viewer :initialValue="message.text"></viewer>
+          <viewer :initialValue="message.text" ref="messageViewer"></viewer>
         </div>
         <div>
           <span v-if="questionCreator === currentUserId && !message.accepted">
@@ -59,6 +59,11 @@ export default {
       dateFormat: { year: 'numeric', month: 'long', day: 'numeric' },
       currentUserId: userService.getCurrent().id
     };
+  },
+  watch: {
+    message: function (newVal, oldVal) {
+      this.$refs.messageViewer.invoke('setMarkdown', newVal.text);
+    }
   },
   methods: {
     upvote(messageId) {

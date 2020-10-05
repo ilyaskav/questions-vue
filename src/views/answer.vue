@@ -42,7 +42,7 @@
         :message="answer"
         :questionCreator="question.creatorId"
         :key="answer.id"
-        @on-edit="editMessage"
+        @on-edit="openEditMessageModal"
         @on-remove="deleteMessage"
       ></answer-item>
     </div>
@@ -56,7 +56,7 @@
       <router-link :to="{ name: 'home' }" class="btn btn-secondary" role="button">Cancel</router-link>
     </div>
 
-    <b-modal id="edit-message-modal" title="Edit Message" size="lg" :static="true">
+    <b-modal id="edit-message-modal" title="Edit Message" size="lg" :static="true" ok-title="Save" @ok="editMessage">
       <editor initialEditType="wysiwyg" ref="editMessageEditor" ></editor>
   </b-modal>
   </div>
@@ -142,10 +142,14 @@ export default {
         if (voteChanged) this.question.votesCount--;
       });
     },
-    editMessage(messageId) {
+    openEditMessageModal(messageId) {
       this.editedMessage = this.question.answers.find(a => a.id === messageId);
       this.$refs.editMessageEditor.invoke('setMarkdown', this.editedMessage.text);
       this.$bvModal.show('edit-message-modal');
+    },
+    editMessage() {
+      this.editedMessage.text = this.$refs.editMessageEditor.invoke('getMarkdown');
+      messageApiService.save(this.editedMessage).then(this.loadQuestion);
     },
     deleteMessage(messageId) {
       this.$bvModal
@@ -155,13 +159,14 @@ export default {
         .then((confirmed) => {
           if (!confirmed) return;
 
-          messageApiService.delete(messageId).then(() => {
-            questionApiService
-              .getQuestionWithAnswers(this.questionId)
-              .then((response) => {
-                this.question = response;
-              });
-          });
+          messageApiService.delete(messageId).then(this.loadQuestion);
+        });
+    },
+    loadQuestion() {
+      questionApiService
+        .getQuestionWithAnswers(this.questionId)
+        .then((response) => {
+          this.question = response;
         });
     }
   }
