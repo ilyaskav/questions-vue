@@ -7,8 +7,11 @@
 <script>
 import testDataSeed from '@/services/test-data-seed-service';
 export default {
-  mounted() {
+  beforeCreate() {
     testDataSeed.seed();
+  },
+  beforeDestroy() {
+    testDataSeed.clean();
   }
 };
 </script>

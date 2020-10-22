@@ -59,7 +59,7 @@ export const questionApiService = {
     return localStorageService.get('questions', []);
   },
   getPopular() {
-    const popularQuestions = getQuesionsList().filter(q => q.answersCount > 1);
+    const popularQuestions = getQuesionsList().filter(q => q.answersCount > 0);
 
     return Promise.resolve(popularQuestions);
   },
@@ -147,6 +147,7 @@ function getQuesionsList() {
     q.creator = allUsers.find(u => u.id === q.creatorId);
     q.answersCount = count(allMessages, (m) => m.questionId === q.id && !m.initial);
     q.votesCount = count(allVotes, (v) => v.messageId === initialMessage.id && v.isUpvote === true);
+    q.hasAcceptedAnswer = allMessages.some(m => m.questionId === q.id && m.accepted === true);
   });
 
   return allQuestions;

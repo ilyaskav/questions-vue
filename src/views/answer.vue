@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group">
+    <div class="mt-4">
       <h5>{{question.answers.length}} {{question.answers.length === 1 ? 'answer' : 'answers'}}</h5>
       <answer-item
         v-for="answer in question.answers"
@@ -184,7 +184,6 @@ export default {
   text-decoration: none;
   font-size: 0.85rem;
 }
-
 .link-btn:not(:last-child)::after {
   content: '•';
   position: relative;
