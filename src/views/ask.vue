@@ -24,10 +24,7 @@
 </template>
 
 <script>
-import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/vue-editor';
-
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 
