@@ -14,7 +14,12 @@ export const messageApiService = {
   },
   save(message) {
     if (message.id) {
-      localStorageService.edit('messages', message);
+      const collection = this.getAll();
+      const messageInDb = collection.find((item) => item.id === message.id);
+  
+      messageInDb.text = message.text;
+  
+      localStorageService.edit('messages', messageInDb);
     } else {
       message.creationDate = new Date();
       message.creatorId = userService.getCurrent().id;

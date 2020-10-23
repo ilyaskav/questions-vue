@@ -1,4 +1,5 @@
 import { localStorageService } from './local-storage-service';
+import { dbTables } from './constansts';
 
 export default {
   seed() {
@@ -8,6 +9,11 @@ export default {
     this.insertMessages();
     this.insertVotes();
   },
+  clean() {
+    Object.values(dbTables).forEach((tableName) => {
+      localStorageService.del(tableName);
+    });
+  },
   insertTags() {
     const tags = [{
       id: 1,
@@ -16,9 +22,13 @@ export default {
     {
       id: 2,
       name: 'build-system'
+    },
+    {
+      id: 3,
+      name: 'javascript'
     }];
 
-    localStorageService.set('tags', tags);
+    localStorageService.set(dbTables.TAGS, tags);
   },
   insertUsers() {
     const users = [
@@ -36,10 +46,15 @@ export default {
         id: 3,
         name: 'Jane',
         surname: 'Black'
+      },
+      {
+        id: 4,
+        name: 'James',
+        surname: 'Smith'
       }
     ];
 
-    localStorageService.set('users', users);
+    localStorageService.set(dbTables.USERS, users);
     sessionStorage.setItem('CURRENT_USER_ID', 2);
   },
   insertQuestions() {
@@ -48,7 +63,7 @@ export default {
         id: 1,
         question: 'Как мне увидеть оповещения о вопросе?',
         creatorId: 1,
-        creationDate: new Date(),
+        creationDate: new Date(2020, 5, 2, 4, 30),
         tags: [{ id: 1, name: 'general' }]
       },
       {
@@ -57,52 +72,89 @@ export default {
         creatorId: 1,
         creationDate: new Date(),
         tags: [{ id: 2, name: 'build-system' }]
+      },
+      {
+        id: 3,
+        question: 'Почему стрелочные функции не работают в качестве методов?',
+        creatorId: 2,
+        creationDate: new Date(2020, 7, 25, 1, 47),
+        tags: [{ id: 3, name: 'javascript' }]
+      },
+      {
+        id: 4,
+        question: 'Зачем заполнять описание work log-a в джире?',
+        creatorId: 3,
+        creationDate: new Date(2020, 6, 11, 6, 53),
+        tags: [{ id: 1, name: 'general' }]
       }
     ];
 
-    localStorageService.set('questions', questions);
+    localStorageService.set(dbTables.QUESTIONS, questions);
   },
   insertMessages() {
     const messages = [
       {
         id: 1,
-        text: 'A?',
+        text: '?',
         questionId: 1,
-        creationDate: new Date(),
-        creatorId: 1,
-        initial: true
+        creationDate: new Date(2020, 5, 2, 4, 30),
+        creatorId: 3,
+        initial: true,
+        accepted: false
       },
       {
         id: 2,
-        text: '???',
-        questionId: 2,
-        creationDate: new Date(),
-        creatorId: 1,
-        initial: true
+        text: 'Итого ответ - оповещения о вопросе получают подписанные на спейс пользователи JIRA',
+        questionId: 1,
+        creationDate: new Date(2020, 5, 4, 7, 13),
+        creatorId: 3,
+        initial: false,
+        accepted: true
       },
       {
         id: 3,
         text: 'Clarification - I am a table',
-        questionId: 1,
+        questionId: 2,
         creationDate: new Date(),
-        creatorId: 1
+        creatorId: 1,
+        initial: true,
+        accepted: false
       },
       {
         id: 4,
-        text: 'So why cant you ?',
-        questionId: 1,
-        creationDate: new Date(),
-        creatorId: 2
+        text: 'Вопрос к менеджерам - какой в этом смысл, их все равно никто не читает.',
+        questionId: 4,
+        creationDate: new Date(2020, 6, 11, 6, 53),
+        creatorId: 3,
+        initial: true,
+        accepted: false
+      },
+      {
+        id: 5,
+        text: `Подскажите пожалуйста, не могу понять почему этот код не работает:
+
+        'use strict';
+        var obj = {
+          i: 10,
+          b: () => console.log(this.i, this)
+        }
+        obj.b(); // prints undefined, Window {...}
+        `,
+        questionId: 3,
+        creationDate: new Date(2020, 7, 25, 1, 47),
+        creatorId: 2,
+        initial: true,
+        accepted: false
       }
     ];
 
-    localStorageService.set('messages', messages);
+    localStorageService.set(dbTables.MESSAGES, messages);
   },
   insertVotes() {
     const votes = [
       {
         id: 1,
-        messageId: 1,
+        messageId: 2,
         userId: 1,
         isUpvote: true
       },
@@ -114,12 +166,12 @@ export default {
       },
       {
         id: 3,
-        messageId: 2,
-        userId: 3,
+        messageId: 1,
+        userId: 4,
         isUpvote: true
       }
     ];
 
-    localStorageService.set('votes', votes);
+    localStorageService.set(dbTables.VOTES, votes);
   }
 };

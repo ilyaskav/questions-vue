@@ -19,7 +19,7 @@
             >Ask question</button>
           </div>
         </div>
-        <questions-list></questions-list>
+        <questions-list :tab="currentTab"></questions-list>
       </div>
     </div>
   </div>
@@ -34,9 +34,17 @@ export default {
   components: {
     QuestionsList
   },
+  beforeRouteUpdate(to, from, next) {
+    this.currentTab = to.query.q;
+    next();
+  },
+  created() {
+    this.currentTab = this.$route.query.q || 'popular';
+  },
   data() {
     return {
-      question: null
+      question: null,
+      currentTab: null
     };
   },
   methods: {

@@ -36,6 +36,9 @@ export const localStorageService = {
     collection[editedItemIndex] = newValue;
 
     this.set(key, collection);
+  },
+  del(key) {
+    localStorage.removeItem(key);
   }
 };
 

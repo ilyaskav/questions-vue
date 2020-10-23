@@ -1,6 +1,6 @@
 import { localStorageService } from './local-storage-service';
 import { userService } from './user-service';
-import { count } from './helpers';
+import { count, sortByCreationDateDesc } from './helpers';
 
 export const questionApiService = {
   getById(id) {
@@ -58,21 +58,20 @@ export const questionApiService = {
   getAll() {
     return localStorageService.get('questions', []);
   },
-  getQuesionsList() {
-    const allQuestions = this.getAll();
-    const allUsers = localStorageService.get('users');
-    const allMessages = localStorageService.get('messages');
-    const allVotes = localStorageService.get('votes');
+  getPopular() {
+    const popularQuestions = getQuesionsList().filter(q => q.answersCount > 0);
 
-    allQuestions.forEach((q) => {
-      const initialMessage = allMessages.find(m => m.questionId === q.id && m.initial === true);
+    return Promise.resolve(popularQuestions);
+  },
+  getRecent() {
+    const recentQuestions = getQuesionsList().sort(sortByCreationDateDesc);
 
-      q.creator = allUsers.find(u => u.id === q.creatorId);
-      q.answersCount = count(allMessages, (m) => m.questionId === q.id && !m.initial);
-      q.votesCount = count(allVotes, (v) => v.messageId === initialMessage.id && v.isUpvote === true);
-    });
+    return Promise.resolve(recentQuestions);
+  },
+  getUnanswered() {
+    const unansweredQuestions = getQuesionsList().filter(q => q.answersCount === 0);
 
-    return allQuestions;
+    return Promise.resolve(unansweredQuestions);
   },
   delete(id) {
     const question = this.getById(id);
@@ -134,4 +133,22 @@ function deleteMessagesByQuestionId(questionId) {
   const messagesWithoutRemoved = messages.filter(m => m.questionId !== questionId);
 
   localStorageService.set('messages', messagesWithoutRemoved);
+}
+
+function getQuesionsList() {
+  const allQuestions = localStorageService.get('questions');
+  const allUsers = localStorageService.get('users');
+  const allMessages = localStorageService.get('messages');
+  const allVotes = localStorageService.get('votes');
+
+  allQuestions.forEach((q) => {
+    const initialMessage = allMessages.find(m => m.questionId === q.id && m.initial === true);
+
+    q.creator = allUsers.find(u => u.id === q.creatorId);
+    q.answersCount = count(allMessages, (m) => m.questionId === q.id && !m.initial);
+    q.votesCount = count(allVotes, (v) => v.messageId === initialMessage.id && v.isUpvote === true);
+    q.hasAcceptedAnswer = allMessages.some(m => m.questionId === q.id && m.accepted === true);
+  });
+
+  return allQuestions;
 }
