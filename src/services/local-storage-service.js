@@ -39,6 +39,9 @@ export const localStorageService = {
   },
   del(key) {
     localStorage.removeItem(key);
+  },
+  exists(key) {
+    return localStorage.getItem(key) !== null;
   }
 };
 

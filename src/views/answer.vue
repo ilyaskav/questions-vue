@@ -5,8 +5,8 @@
       <div class="col-md-1">
         <vote-counter
           :votes="question.votesCount"
-          @vote-up="upvote(question.messageId)"
-          @vote-down="downvote(question.messageId)"
+          @vote-up="upvote(question.message.id)"
+          @vote-down="downvote(question.message.id)"
         ></vote-counter>
       </div>
       <div class="col-md-11">
@@ -22,7 +22,9 @@
             class="badge badge-secondary question-tag"
             v-for="tag in question.tags"
             :key="tag.id"
-          >{{tag.name}}</span>
+          >
+            {{tag.name}}
+          </span>
         </div>
         <div v-if="question.creatorId === currentUserId">
           <b-button
@@ -47,11 +49,13 @@
       ></answer-item>
     </div>
     <div class="form-group">
-      <h5>Your answer</h5>
+      <h5 class="mb-4">Your answer</h5>
       <editor initialEditType="wysiwyg" ref="createMessageEditor"></editor>
     </div>
     <div class="form-group">
-      <button type="button" class="btn btn-primary" @click="saveAnswer()">Save</button>
+      <button type="button" class="btn btn-primary" @click="saveAnswer()">
+        Save
+      </button>
       &nbsp;
       <router-link :to="{ name: 'home' }" class="btn btn-secondary" role="button">Cancel</router-link>
     </div>
@@ -69,8 +73,8 @@ import { voteApiService } from '@/services/vote-api-service';
 import { userService } from '@/services/user-service';
 import AnswerItem from '@/components/answer-item';
 import VoteCounter from '@/components/vote-counter';
-
 import { Editor, Viewer } from '@toast-ui/vue-editor';
+import { dateFormat } from '@/services/constants';
 
 export default {
   props: {
@@ -85,7 +89,7 @@ export default {
   data() {
     return {
       question: null,
-      dateFormat: { year: 'numeric', month: 'long', day: 'numeric' },
+      dateFormat: dateFormat.DEFAULT,
       currentUserId: userService.getCurrent().id,
       editMessageEditorOptions: {
         minHeight: '150px'

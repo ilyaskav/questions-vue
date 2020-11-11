@@ -4,8 +4,8 @@
       <div class="col-md-1 vote-section">
         <vote-counter
           :votes="message.votesCount"
-          @vote-up="upvote(message.messageId)"
-          @vote-down="downvote(message.messageId)"
+          @vote-up="upvote(message.id)"
+          @vote-down="downvote(message.id)"
         ></vote-counter>
         <p class="h4" v-if="message.accepted">
           <b-icon-check-circle-fill variant="success"></b-icon-check-circle-fill>
@@ -20,9 +20,10 @@
           <viewer :initialValue="message.text" ref="messageViewer"></viewer>
         </div>
         <div>
-          <span v-if="questionCreator === currentUserId && !message.accepted">
-            <b-button @click="acceptAnswer()" variant="link" class="link-btn">Accept Answer</b-button>&bull;
-          </span>
+            <b-button @click="acceptAnswer()" variant="link" class="link-btn"
+              v-if="questionCreator === currentUserId && !message.accepted">
+              Accept Answer
+            </b-button>
           <span v-if="message.creatorId === currentUserId">
             <b-button @click="$emit('on-edit', message.id)" variant="link" class="link-btn">Edit</b-button>
             <b-button @click="$emit('on-remove', message.id)" variant="link" class="link-btn">Delete</b-button>
@@ -41,6 +42,7 @@ import { BIconCheckCircleFill } from 'bootstrap-vue';
 import { voteApiService } from '@/services/vote-api-service';
 import { messageApiService } from '@/services/message-api-service';
 import { userService } from '@/services/user-service';
+import { dateFormat } from '@/services/constants';
 
 export default {
   props: {
@@ -54,7 +56,7 @@ export default {
   },
   data() {
     return {
-      dateFormat: { year: 'numeric', month: 'long', day: 'numeric' },
+      dateFormat: dateFormat.DEFAULT,
       currentUserId: userService.getCurrent().id
     };
   },

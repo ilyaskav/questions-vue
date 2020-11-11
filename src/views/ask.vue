@@ -1,25 +1,35 @@
 <template>
   <div>
-    <h3>Ask a question</h3>
-    <div class="form-group">
-      <input
-        type="text"
-        placeholder="What do you want to know"
-        class="form-control"
-        v-model="post.question"
-      />
-    </div>
-    <div class="form-group">
-      <editor :initialValue="post.message.text" initialEditType="wysiwyg" ref="toastuiEditor"></editor>
-    </div>
-    <div class="form-group">
-      <v-select taggable multiple push-tags :options="tags" label="name" v-model="post.tags" />
-    </div>
-    <div class="form-group">
-      <button type="button" class="btn btn-primary" @click="saveQuestion()">Save</button>
-      &nbsp;
-      <router-link :to="{ name: 'home' }" class="btn btn-secondary" role="button">Cancel</router-link>
-    </div>
+    <header>
+      <h3>Ask a question</h3>
+    </header>
+    <ValidationObserver v-slot="{ invalid }">
+      <form @submit.prevent="onSubmit">
+        <div class="form-group">
+          <ValidationProvider rules="required" v-slot="{ classes }">
+            <input
+              type="text"
+              placeholder="What do you want to know"
+              class="form-control" :class="classes"
+              v-model="post.question"
+            />
+          </ValidationProvider>
+        </div>
+        <div class="form-group">
+          <editor :initialValue="post.message.text" initialEditType="wysiwyg" ref="toastuiEditor"></editor>
+        </div>
+        <div class="form-group">
+          <v-select taggable multiple push-tags :options="tags" label="name" v-model="post.tags" />
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-primary" @click="saveQuestion()" :disabled="invalid">
+            Save
+          </button>
+          &nbsp;
+          <router-link :to="{ name: 'home' }" class="btn btn-secondary" role="button">Cancel</router-link>
+        </div>
+    </form>
+    </ValidationObserver>
   </div>
 </template>
 

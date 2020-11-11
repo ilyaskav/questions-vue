@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/home.vue';
+import PageNotFound from '../views/404.vue';
 
 Vue.use(VueRouter);
 
@@ -11,7 +12,7 @@ const routes = [
     component: Home
   },
   {
-    path: '/ask/:questionId',
+    path: '/ask/:questionId?',
     name: 'ask',
     props: (route) => ({
       question: route.query.question,
@@ -28,7 +29,8 @@ const routes = [
       return props;
     },
     component: () => import(/* webpackChunkName: "answer" */ '../views/answer.vue')
-  }
+  },
+  { path: '*', component: PageNotFound }
 ];
 
 const router = new VueRouter({
