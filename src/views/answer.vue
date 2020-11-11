@@ -5,8 +5,8 @@
       <div class="col-md-1">
         <vote-counter
           :votes="question.votesCount"
-          @vote-up="upvote(question.messageId)"
-          @vote-down="downvote(question.messageId)"
+          @vote-up="upvote(question.message.id)"
+          @vote-down="downvote(question.message.id)"
         ></vote-counter>
       </div>
       <div class="col-md-11">
@@ -22,7 +22,9 @@
             class="badge badge-secondary question-tag"
             v-for="tag in question.tags"
             :key="tag.id"
-          >{{tag.name}}</span>
+          >
+            {{tag.name}}
+          </span>
         </div>
         <div v-if="question.creatorId === currentUserId">
           <b-button
@@ -51,7 +53,9 @@
       <editor initialEditType="wysiwyg" ref="createMessageEditor"></editor>
     </div>
     <div class="form-group">
-      <button type="button" class="btn btn-primary" @click="saveAnswer()">Save</button>
+      <button type="button" class="btn btn-primary" @click="saveAnswer()">
+        Save
+      </button>
       &nbsp;
       <router-link :to="{ name: 'home' }" class="btn btn-secondary" role="button">Cancel</router-link>
     </div>

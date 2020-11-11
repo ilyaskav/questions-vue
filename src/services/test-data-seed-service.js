@@ -14,6 +14,9 @@ export default {
       localStorageService.del(tableName);
     });
   },
+  initialDataIsLoaded() {
+    return Object.values(dbTables).every((tableName) => localStorageService.exists(tableName));
+  },
   insertTags() {
     const tags = [{
       id: 1,
@@ -70,7 +73,7 @@ export default {
         id: 2,
         question: 'Как часто вы выдаете билды в тестинг?',
         creatorId: 1,
-        creationDate: new Date(),
+        creationDate: new Date(2020, 8, 11),
         tags: [{ id: 2, name: 'build-system' }]
       },
       {
@@ -113,9 +116,9 @@ export default {
       },
       {
         id: 3,
-        text: 'Clarification - I am a table',
+        text: 'Есть ли какие-то общие рекомендации на этот счет?',
         questionId: 2,
-        creationDate: new Date(),
+        creationDate: new Date(2020, 8, 11),
         creatorId: 1,
         initial: true,
         accepted: false

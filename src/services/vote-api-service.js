@@ -2,10 +2,9 @@ import { localStorageService } from './local-storage-service';
 import { userService } from './user-service';
 
 export const voteApiService = {
-  getById(id) {
-
-  },
   getByMessageId(messageId, userId = null) {
+    if (!messageId) throw new Error('messageId is missing');
+
     const collection = this.getAll();
     const vote = collection.find(v => v.questionId === messageId
       && (v.userId === userId || userService.getCurrent().id));

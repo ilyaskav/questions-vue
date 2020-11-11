@@ -1,24 +1,14 @@
 # questions-vue
 
-## Project setup
+## How to run
 ```
-npm install
+> npm install
+
+> npm run serve
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Notes
+To change current user, change 'CURRENT_USER_ID' in a method insertUsers() of test-data-seed-service.js
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Known issues
+- It is possible to post an empty comment 
