@@ -70,9 +70,6 @@ import { userService } from '@/services/user-service';
 import AnswerItem from '@/components/answer-item';
 import VoteCounter from '@/components/vote-counter';
 
-import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Editor, Viewer } from '@toast-ui/vue-editor';
 
 export default {

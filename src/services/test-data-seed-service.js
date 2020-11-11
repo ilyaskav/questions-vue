@@ -63,7 +63,7 @@ export default {
         id: 1,
         question: 'Как мне увидеть оповещения о вопросе?',
         creatorId: 1,
-        creationDate: new Date(2020, 5, 2, 4, 30),
+        creationDate: new Date(2020, 5, 2),
         tags: [{ id: 1, name: 'general' }]
       },
       {
@@ -77,14 +77,14 @@ export default {
         id: 3,
         question: 'Почему стрелочные функции не работают в качестве методов?',
         creatorId: 2,
-        creationDate: new Date(2020, 7, 25, 1, 47),
+        creationDate: new Date(2020, 7, 25),
         tags: [{ id: 3, name: 'javascript' }]
       },
       {
         id: 4,
         question: 'Зачем заполнять описание work log-a в джире?',
         creatorId: 3,
-        creationDate: new Date(2020, 6, 11, 6, 53),
+        creationDate: new Date(2020, 6, 11),
         tags: [{ id: 1, name: 'general' }]
       }
     ];
@@ -97,7 +97,7 @@ export default {
         id: 1,
         text: '?',
         questionId: 1,
-        creationDate: new Date(2020, 5, 2, 4, 30),
+        creationDate: new Date(2020, 5, 2),
         creatorId: 3,
         initial: true,
         accepted: false
@@ -106,7 +106,7 @@ export default {
         id: 2,
         text: 'Итого ответ - оповещения о вопросе получают подписанные на спейс пользователи JIRA',
         questionId: 1,
-        creationDate: new Date(2020, 5, 4, 7, 13),
+        creationDate: new Date(2020, 5, 4),
         creatorId: 3,
         initial: false,
         accepted: true
@@ -124,7 +124,7 @@ export default {
         id: 4,
         text: 'Вопрос к менеджерам - какой в этом смысл, их все равно никто не читает.',
         questionId: 4,
-        creationDate: new Date(2020, 6, 11, 6, 53),
+        creationDate: new Date(2020, 6, 11),
         creatorId: 3,
         initial: true,
         accepted: false
@@ -141,7 +141,7 @@ export default {
         obj.b(); // prints undefined, Window {...}
         `,
         questionId: 3,
-        creationDate: new Date(2020, 7, 25, 1, 47),
+        creationDate: new Date(2020, 7, 25),
         creatorId: 2,
         initial: true,
         accepted: false

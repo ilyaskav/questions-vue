@@ -6,6 +6,7 @@
 
 <script>
 import testDataSeed from '@/services/test-data-seed-service';
+
 export default {
   beforeCreate() {
     testDataSeed.seed();
