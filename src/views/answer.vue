@@ -49,7 +49,7 @@
       ></answer-item>
     </div>
     <div class="form-group">
-      <h5>Your answer</h5>
+      <h5 class="mb-4">Your answer</h5>
       <editor initialEditType="wysiwyg" ref="createMessageEditor"></editor>
     </div>
     <div class="form-group">
@@ -73,8 +73,8 @@ import { voteApiService } from '@/services/vote-api-service';
 import { userService } from '@/services/user-service';
 import AnswerItem from '@/components/answer-item';
 import VoteCounter from '@/components/vote-counter';
-
 import { Editor, Viewer } from '@toast-ui/vue-editor';
+import { dateFormat } from '@/services/constants';
 
 export default {
   props: {
@@ -89,7 +89,7 @@ export default {
   data() {
     return {
       question: null,
-      dateFormat: { year: 'numeric', month: 'long', day: 'numeric' },
+      dateFormat: dateFormat.DEFAULT,
       currentUserId: userService.getCurrent().id,
       editMessageEditorOptions: {
         minHeight: '150px'

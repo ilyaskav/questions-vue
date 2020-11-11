@@ -26,6 +26,7 @@
 
 <script>
 import { BIconCheckCircleFill } from 'bootstrap-vue';
+import { dateFormat } from '@/services/constants';
 
 export default {
   props: {
@@ -36,7 +37,7 @@ export default {
   },
   data() {
     return {
-      dateFormat: { year: 'numeric', month: 'long', day: 'numeric' }
+      dateFormat: dateFormat.DEFAULT
     };
   }
 };

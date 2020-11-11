@@ -1,5 +1,5 @@
 import { localStorageService } from './local-storage-service';
-import { dbTables } from './constansts';
+import { dbTables } from './constants';
 
 export default {
   seed() {

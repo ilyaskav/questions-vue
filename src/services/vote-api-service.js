@@ -6,7 +6,7 @@ export const voteApiService = {
     if (!messageId) throw new Error('messageId is missing');
 
     const collection = this.getAll();
-    const vote = collection.find(v => v.questionId === messageId
+    const vote = collection.find(v => v.messageId === messageId
       && (v.userId === userId || userService.getCurrent().id));
 
     return vote || null;
@@ -39,7 +39,7 @@ function vote(messageId, isUpvote) {
     localStorageService.edit('votes', vote);
   } else {
     vote = {
-      questionId: messageId,
+      messageId: messageId,
       userId: currentUser.id,
       isUpvote: isUpvote
     };

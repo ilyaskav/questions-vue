@@ -5,3 +5,7 @@ export const dbTables = {
   MESSAGES: 'messages',
   USERS: 'users'
 };
+
+export const dateFormat = {
+  DEFAULT: { year: 'numeric', month: 'long', day: 'numeric' }
+};
